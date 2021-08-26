@@ -92,6 +92,8 @@ From within the project root directory, execute the following command associated
 
 # TODO - Possible Future Improvements:
 Below are some, but not all, possible future improvements to be developed for the project.
+- [ ] Research more about certbot (letsencrypt) so that I can properly manage letsencrypt accounts and credentials.
+- [ ] Test certbot's renew cert functionality (both running manually and via the configured cron job)
 - [ ] Add functionality to create new 'service account user'. Then, configure and deploy server with new service account (instead of current method of performing all functions using standard user account).
 - [ ] improve nginx configurations to align with security best practices (security headers, server side configs, etc.)
 - [ ] improve file system security by implementing least privilege on server-related files/dirs.
