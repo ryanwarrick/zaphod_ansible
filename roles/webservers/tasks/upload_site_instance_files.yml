@@ -1,0 +1,16 @@
+---
+# This playbook contains site instance file upload plays for all "webserver" nodes
+
+- name: Upload site instance-specific files to server
+  copy:
+    src: "{{ item }}"
+    dest: "/home/{{ ansible_user }}/zaphod/venv/var/zaphod-instance/{{ item }}"
+    mode: "770"
+    owner: "{{ ansible_user }}"
+    group: "{{ nginx_user }}"
+  loop:
+    - "content/"
+    - "config.py"
+  notify:
+    - restart gunicorn
+    - restart nginx

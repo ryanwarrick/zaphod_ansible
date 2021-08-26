@@ -1,0 +1,42 @@
+---
+# This playbook contains common plays for all nodes
+# This playbook contains ufw plays for all "common" nodes
+
+- name: configure ufw
+  import_tasks: ufw_config.yml
+
+- name: install nginx
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: nginx_install.yml
+
+- name: configure nginx
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: nginx_config.yml
+
+- name: install zaphod
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: zaphod_install.yml
+
+- name: configure gunicorn
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: gunicorn_config.yml
+
+- name: upload site instance files
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: upload_site_instance_files.yml
+
+- name: initialize zaphod
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: zaphod_initialize.yml
+
+- name: install and configure certbot
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: certbot_install_and_config.yml
+  when: production_deployment

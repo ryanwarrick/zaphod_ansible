@@ -1,0 +1,7 @@
+---
+# Maps webservers group to the appropriate / related roles
+
+- hosts: webservers
+  roles:
+    - common
+    - webservers

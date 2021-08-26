@@ -1,0 +1,55 @@
+---
+# UFW related plays for all "common" nodes
+
+- name: install ufw on non-RedHat systems (without yum package manager)
+  package:
+    name: ufw
+    state: present
+  when: ansible_facts['os_family'] != "RedHat"
+
+- name: install epel repo on RedHat systems (with yum package manager)
+  yum:
+    name: epel-release
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: install ufw on RedHat systems (with yum package manager)
+  yum:
+    name: ufw
+    state: present
+    enablerepo: epel
+    update_cache: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: configure ufw - granular rules (SSH)
+  community.general.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop:
+    - { rule: "allow", port: "22", proto: "tcp" }
+  register: ufw_result
+  # Task was reliably failing upon first call to apply FW rules (connection hiccup)
+  # Retry logic added to retry applying configs, up to five times, prior to failing
+  retries: 5
+  delay: 5
+  until: ufw_result is not failed
+  notify: restart ufw
+
+- name: configure ufw - default rules
+  community.general.ufw:
+    policy: "{{ item.policy }}"
+    direction: "{{ item.direction }}"
+  loop:
+    - { policy: "allow", direction: "outgoing" }
+    - { policy: "deny", direction: "incoming" }
+  notify: restart ufw
+
+- name: enable ufw logging
+  community.general.ufw: logging=on
+  notify: restart ufw
+
+- name: enable ufw
+  community.general.ufw:
+    state: enabled

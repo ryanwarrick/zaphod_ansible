@@ -1,0 +1,55 @@
+---
+# This playbook contains nginx config plays for all "webserver" nodes
+
+- name: apply nginx app config template (Debian)
+  # Can't use validate within template module on Debian,
+  # because of permission issues. Therefore, this task is equivalent
+  # to the below task except for skipping the validation step
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: restart nginx
+  when: ansible_facts['distribution'] == "Debian"
+
+- name: apply nginx app config template (Non-Debian)
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    validate: /usr/sbin/nginx -t -c %s
+  notify: restart nginx
+  when: ansible_facts['distribution'] != "Debian"
+
+- name: apply nginx site config template
+  vars:
+    source_config_template: "{{ 'zaphod.prod.conf.j2' if production_deployment else 'zaphod.dev.conf.j2' }}"
+  template:
+    src: "{{ source_config_template }}"
+    dest: /etc/nginx/conf.d/zaphod.conf
+  notify: restart nginx
+
+- name: add nginx proxy_params file, if missing
+  copy:
+    src: proxy_params
+    dest: /etc/nginx/proxy_params
+  notify: restart nginx
+
+- name: generate DH params (2048 bits)
+  community.crypto.openssl_dhparam:
+    path: /etc/ssl/certs/ssl-dhparams.pem
+    size: 2048
+    mode: "770"
+    owner: "{{ nginx_user }}"
+  notify: restart nginx
+
+- name: update options-ssl-nginx.conf config file
+  copy:
+    src: options-ssl-nginx.conf
+    dest: /etc/nginx/options-ssl-nginx.conf
+    backup: yes
+  notify: restart nginx
+
+- name: enable nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes

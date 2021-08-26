@@ -1,0 +1,17 @@
+---
+# Calls playbooks appropriate for all "common" nodes
+
+# Updates package cache for systems with apt package manager.
+# Not doing the equivalent for distros with yum package manager,
+# because yum module offers update_cache param unlike generic package module.
+- name: Update apt cache
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  apt:
+    update_cache: yes
+  when: ansible_facts['os_family'] != "RedHat"
+
+- name: install and configure ufw
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: ufw_install_and_config.yml

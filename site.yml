@@ -1,0 +1,5 @@
+---
+# Imports other playbooks (one for each function/role)
+# Additional playbooks would be imported here, per infrastructure needs
+
+- import_playbook: webservers.yml

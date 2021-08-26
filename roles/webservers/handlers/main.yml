@@ -1,0 +1,22 @@
+---
+# Handlers defined for 'webservers'
+
+- name: restart ufw
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  community.general.ufw:
+    state: reloaded
+
+- name: restart gunicorn
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  service:
+    name: zaphod
+    state: restarted
+
+- name: restart nginx
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  service:
+    name: nginx
+    state: restarted

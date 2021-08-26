@@ -1,0 +1,21 @@
+server {
+    listen 443 ssl;
+	server_name {{ domain_name }} {{ domain_name_with_www }};
+
+	location / {
+		include proxy_params;
+        proxy_pass http://unix:/var/run/zaphod/zaphod.sock;
+	}
+
+    ssl_certificate /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+    include /etc/nginx/options-ssl-nginx.conf;
+    ssl_dhparam /etc/ssl/certs/ssl-dhparams.pem;
+}
+
+server {
+    listen 80;
+    listen 443;
+    server_name {{ server_ip }};
+    return 301 https://{{ domain_name }}$request_uri;
+}

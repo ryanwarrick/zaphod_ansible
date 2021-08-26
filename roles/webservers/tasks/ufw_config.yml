@@ -1,0 +1,15 @@
+---
+# This playbook contains ufw plays for all "webserver" nodes
+
+- name: configure ufw - granular rules (HTTP/HTTPS)
+  become: yes
+  become_user: root
+  community.general.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop:
+    - { rule: "allow", port: "80", proto: "tcp" }
+    - { rule: "allow", port: "443", proto: "tcp" }
+  notify:
+    - restart ufw

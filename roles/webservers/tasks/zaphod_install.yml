@@ -1,0 +1,41 @@
+---
+# This playbook contains zaphod install plays for all "webserver" nodes
+
+- name: create zaphod dir if it doesn't exist
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/zaphod"
+    state: directory
+    mode: "770"
+    owner: "{{ ansible_user }}"
+    group: "{{ nginx_user }}"
+
+- name: ensure pip is installed
+  include_role:
+    name: geerlingguy.pip
+
+- name: install virtualenv via pip
+  pip:
+    name: virtualenv
+    executable: pip3
+
+- name: install git
+  include_role:
+    name: geerlingguy.git
+
+- name: install Zaphod from source (via GitHub)
+  pip:
+    name: git+https://github.com/ryanwarrick/zaphod.git
+    virtualenv: "/home/{{ ansible_user }}/zaphod/venv"
+    virtualenv_command: /usr/local/bin/virtualenv
+
+- name: chown venv to ansible_user
+  file:
+    path: "/home/{{ ansible_user }}/zaphod/venv"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    recurse: yes
+
+- name: chmod user1 home directory
+  file:
+    path: "/home/{{ ansible_user }}"
+    mode: "770"

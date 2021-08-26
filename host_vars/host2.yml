@@ -1,0 +1,12 @@
+ansible_host: host2.localnet.com
+
+ansible_user: user1
+nginx_user: www-data
+
+production_deployment: true
+
+server_ip: 192.0.2.2
+domain_name: example.com
+domain_name_with_www: www.example.com
+
+ansible_python_interpreter: /usr/bin/python3

@@ -1,0 +1,10 @@
+server {
+    listen 80;
+	server_name 0.0.0.0;
+
+	location / {
+		include proxy_params;
+        proxy_pass http://unix:/var/run/zaphod/zaphod.sock;
+	}
+
+}

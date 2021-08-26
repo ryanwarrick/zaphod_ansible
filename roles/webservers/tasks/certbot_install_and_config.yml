@@ -1,0 +1,34 @@
+---
+# This playbook contains certbot config plays for all "webserver" nodes
+
+- name: Install certbot dependencies on RedHat systems (with yum package manager)
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: ansible_facts['os_family'] == "RedHat"
+  loop:
+    - cronie
+    - epel-release
+
+- name: Install certbot dependencies on non-RedHat systems (with non-yum package managers)
+  package:
+    name: cron
+    state: present
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install and configure certbot
+  import_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_admin_email: ryanwarrick1@gmail.com
+    certbot_create_if_missing: true
+    certbot_certs:
+      - domains:
+          - ryanwarrick.com
+    certbot_create_standalone_stop_services:
+      - nginx
+    certbot_install_method: package
+    certbot_auto_renew: true
+    certbot_auto_renew_user: "{{ ansible_user }}"
+    certbot_auto_renew_minute: "20"
+    certbot_auto_renew_hour: "5"

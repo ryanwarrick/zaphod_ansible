@@ -1,0 +1,23 @@
+---
+# This playbook contains gunicorn config plays for all "webserver" nodes
+
+- name: copy systemd service file to server
+  template:
+    src: gunicorn.service.j2
+    dest: /etc/systemd/system/zaphod.service
+    owner: root
+    group: root
+
+- name: create directory for temporary socket file
+  file:
+    path: /var/run/zaphod
+    owner: "{{ ansible_user }}"
+    group: "{{ nginx_user }}"
+    mode: "770"
+    state: directory
+
+- name: start and enable custom gunicorn service
+  service:
+    name: zaphod.service
+    state: started
+    enabled: yes

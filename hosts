@@ -1,0 +1,7 @@
+all:
+  children:
+    ungrouped: {}
+    webservers:
+      hosts:
+        host1:
+        host2:

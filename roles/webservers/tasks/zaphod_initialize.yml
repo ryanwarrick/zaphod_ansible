@@ -1,0 +1,14 @@
+---
+# This playbook contains zaphod initialization plays for all "webserver" nodes
+
+- name: initialize flask db
+  environment:
+    FLASK_APP: zaphod
+  command:
+    chdir: "/home/{{ ansible_user }}/zaphod/"
+    cmd: ./venv/bin/python3 -m flask init-db
+  register: command_result
+  failed_when: '"Initialized the database." not in command_result.stdout'
+  notify:
+    - restart gunicorn
+    - restart nginx

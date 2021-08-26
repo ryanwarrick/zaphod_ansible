@@ -1,0 +1,8 @@
+---
+# Handlers defined for common hosts
+
+- name: restart ufw
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  community.general.ufw:
+    state: reloaded

@@ -1,0 +1,21 @@
+# Virtual Environment
+venv/
+
+# Ansible runtime and backups
+*.original
+*.tmp
+*.bkp
+*.retry
+*.*~
+
+# Ignore my actual hosts and associated host_vars (but preserve examples)
+my_hosts
+
+!host_vars
+host_vars/*
+!host_vars/host1.yml
+!host_vars/host2.yml
+
+# Ignore instance-specific items (config & content) in webserves/files dir.
+roles/webservers/files/config.py
+roles/webservers/files/content
