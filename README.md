@@ -6,7 +6,7 @@
 [![code with hearth by ryanwarrick](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-ryanwarrick-ff1414.svg?style=flat-square)](https://github.com/ryanwarrick)
 
 # Summary
-This project is designed as a deployment automation tool for use with the web app I recently built, [Zaphod](https://github.com/ryanwarrick/zaphod).
+This project is designed as a deployment automation tool for use with the web app I built, [Zaphod](https://github.com/ryanwarrick/zaphod).
 
 ## Initial Problem
 Like most apps, Zaphod requires a set of system dependencies and a specific environment configuration in order to run in production. The major dependencies are: [Python](https://www.python.org/), [Flask](https://flask.palletsprojects.com/) (Python web framework), [Gunicorn](https://gunicorn.org/) (Python WSGI HTTP server), and [Nginx](https://www.nginx.com/) (Reverse proxy server).
@@ -16,14 +16,14 @@ While performing the initial install and config process to deploy my Zaphod web 
 ## Ansible to the Rescue
 Informed by a background in IT compliance, I deeply appreciate the importance of configuration management and validation processes. Throughout my experience in cybersecurity administration, I have observed a general need for compliance and efficiency improvements.
 
-Ansible, Red Hat's open source IT automation tool, promises to provide help with these troublesome functions of IT. Consequently, I chose to learn about Ansible and use it to build this deployment automation tool.
+Ansible, Red Hat's open source IT automation tool, promises to provide help with these troublesome functions of IT. Consequently, I chose to learn about Ansible and how use it to build this deployment automation tool.
 
 ## Solution
-To consistently and repeatably create an appropriate production environment and deploy my Zaphod web app, I chose to use Ansible to help build out some of my DevOps stack. As a result, I can execute this ansible-playbook against a fresh install of Linux in a cloud VM to reliably deploy the Zaphod web app.
+To consistently and repeatably create an appropriate production environment and deploy my Zaphod web app, I chose to use Ansible to help build out some of my DevOps stack. As a result, I can execute this ansible-playbook against a fresh install of Linux in a cloud VM to reliably deploy the Zaphod web app from a package file.
 
 So far, Ansible has helped me with the deployment and administration of my Zaphod web app by helping to:
 - increase productivity by handling rote deployment and management tasks
-- minimize misconfiguration risks by reducing the opportunity for human error.
+- minimize misconfiguration risks by reducing the need for manual configuration tasks and, consequently, the opportunity for human error.
 - provide a level of auditability otherwise impractical through manual server administration methods
 
 # Control / Remote Node Requirements:
@@ -53,7 +53,7 @@ The following dependencies, Ansible roles and collections, must be installed to 
 | geerlingguy.git           | Role       | Galaxy | 3.0.0        |
 | ansible-role-nginx-config | Role       | GitHub | 0.4.0 (main) |
 
-Note: YMMV, I haven't explored or tested with other versions of these dependencies (for all except ansible-role-nginx-config, which does currently specifically require the built from source version avaiable via GitHub).
+Note: YMMV, I haven't explored or tested with other versions of these dependencies (for all except ansible-role-nginx-config, which does currently specifically require the built from source version available via GitHub).
 
 ### Installing Ansible Dependencies
 From the project root directory AND with the aforementioned control node's virtual environment activated, execute the following commands to install the required dependencies:
