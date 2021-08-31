@@ -22,9 +22,15 @@
   include_role:
     name: geerlingguy.git
 
+- name: Purge existing venv, if exists
+  file:
+    path: "/home/{{ ansible_user }}/zaphod/venv"
+    state: absent
+
 - name: install Zaphod from source (via GitHub)
   pip:
     name: git+https://github.com/ryanwarrick/zaphod.git
+    state: forcereinstall
     virtualenv: "/home/{{ ansible_user }}/zaphod/venv"
     virtualenv_command: /usr/local/bin/virtualenv
 
