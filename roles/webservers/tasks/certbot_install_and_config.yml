@@ -20,11 +20,11 @@
   import_role:
     name: geerlingguy.certbot
   vars:
-    certbot_admin_email: ryanwarrick1@gmail.com
+    certbot_admin_email: "{{ certbot_admin_email }}"
     certbot_create_if_missing: true
     certbot_certs:
       - domains:
-          - ryanwarrick.com
+          - "{{ domain_name }}"
     certbot_create_standalone_stop_services:
       - nginx
     certbot_install_method: package
