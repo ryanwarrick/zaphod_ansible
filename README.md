@@ -90,6 +90,15 @@ From within the project root directory, execute the following command associated
 - Limit Host Scope:
   - `ansible-playbook -i hosts --limit host1 site.yml`
 
+# Files Not in Change Management (Manual Backups Required)
+Some files within projects are not controlled by change management as specified by the .gitignore config because they contain sensitive data, therefore it's not appropriate to sync them to a change management repository.
+
+Sensitive files:
+* <project_root>/host_vars/<hostname>.yml (host-specific variable files for each deployment target host)
+* <project_root>/my_hosts (custom inventory file to not clash with the example 'hosts' inventory file)
+
+To avoid data loss of these files that aren't Git tracked, make sure to backup these files to a different location, as appropriate.
+
 # TODO - Possible Future Improvements:
 Below are some, but not all, possible future improvements to be developed for the project.
 - [ ] Research more about certbot (letsencrypt) so that I can properly manage letsencrypt accounts and credentials.
