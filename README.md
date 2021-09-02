@@ -48,6 +48,7 @@ The following Ansible role and collection dependencies must be installed to the 
 | ------------------------- | ---------- | ------ | ------------ |
 | nginxinc.nginx            | Collection | Galaxy | 0.20.0       |
 | community.crypto          | Collection | Galaxy | 0.20.0       |
+| community.general         | Collection | Galaxy | 3.6.0        |
 | geerlingguy.certbot       | Role       | Galaxy | 4.1.0        |
 | geerlingguy.pip           | Role       | Galaxy | 2.1.0        |
 | geerlingguy.git           | Role       | Galaxy | 3.0.0        |
