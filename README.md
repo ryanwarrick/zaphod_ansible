@@ -6,25 +6,25 @@
 [![code with hearth by ryanwarrick](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-ryanwarrick-ff1414.svg?style=flat-square)](https://github.com/ryanwarrick)
 
 # Summary
-This project is designed as a deployment automation tool for use with the web app I built, [Zaphod](https://github.com/ryanwarrick/zaphod).
+Zaphod_Ansible is a configuration and deployment automation tool. It is designed as a companion to [Zaphod](https://github.com/ryanwarrick/zaphod), a website I built with Python Flask.
 
 ## Initial Problem
-Like most apps, Zaphod requires a set of system dependencies and a specific environment configuration in order to run in production. The major dependencies are: [Python](https://www.python.org/), [Flask](https://flask.palletsprojects.com/) (Python web framework), [Gunicorn](https://gunicorn.org/) (Python WSGI HTTP server), and [Nginx](https://www.nginx.com/) (Reverse proxy server).
+Like most apps, Zaphod requires system dependencies and specific environment configurations to run in production. For example, Zaphod requires dependencies like Flask and Nginx while also requiring the configuration of services and file permissions.
 
-While performing the initial install and config process to deploy my Zaphod web app to a fresh Linux install, it became obvious that the finicky manual steps are simply untenable in a mock DRP scenario. Not only is the admin time a burden, but the RTO (recovery time objective) is simply too high. The need for IT automation tools like Ansible became obvious.
+While performing the initial install and config process to deploy my Zaphod website to a fresh OS image, it became clear that the finicky manual steps of the procedure are untenable in a mock DRP scenario. Not only is the admin time a burden, but redeploying from scratch wouldn't satisfy my self-defined RTO (recovery time objective). IT automation tools like Ansible are designed to help address these concerns.
 
 ## Ansible to the Rescue
 Informed by a background in IT compliance, I deeply appreciate the importance of configuration management and validation processes. Throughout my experience in cybersecurity administration, I have observed a general need for compliance and efficiency improvements.
 
-Ansible, Red Hat's open source IT automation tool, promises to provide help with these troublesome functions of IT. Consequently, I chose to learn about Ansible and how use it to build this deployment automation tool.
+Ansible, Red Hat's open source IT automation tool, promises to provide help with these troublesome functions of IT. Consequently, I chose to learn about Ansible and how to use it to build this deployment automation tool.
 
 ## Solution
-To consistently and repeatably create an appropriate production environment and deploy my Zaphod web app, I chose to use Ansible to help build out some of my DevOps stack. As a result, I can execute this ansible-playbook against a fresh install of Linux in a cloud VM to reliably deploy the Zaphod web app from a package file.
+To consistently and repeatably create an appropriate production environment and deploy my Zaphod website, I chose to use Ansible to build a majority of my DevOps stack. As a result, I can execute this ansible-playbook against a fresh install of Linux in a cloud VM to reliably deploy the Zaphod website from a package file.
 
-So far, Ansible has helped me with the deployment and administration of my Zaphod web app by helping to:
+So far, Ansible has helped me with the deployment and administration of my Zaphod website by helping to:
 - increase productivity by handling rote deployment and management tasks
 - minimize misconfiguration risks by reducing the need for manual configuration tasks and, consequently, the opportunity for human error.
-- provide a level of auditability otherwise impractical through manual server administration methods
+- provide a level of auditability otherwise impractical via manual server administration methods
 
 # Control / Remote Node Requirements:
 
@@ -37,12 +37,12 @@ These dependencies must be installed
 | ---------- | --------------------------------- |
 | Python     | 3.8.x                             |
 | Ansible*   | 4.4.x                             |
-\* Installed via pip *(inside the venv created below)*
+\* Installed via pip *(inside the virtual environment created below)*
 
 Note: YMMV, I haven't explored or tested with other versions of these dependencies. Newer Python and Ansible versions may work just fine.
 
 ## Ansible Dependencies (Control Node):
-The following dependencies, Ansible roles and collections, must be installed to the Ansible instance within the control node's virtual environment. See 'Installing Ansible Dependencies' for instructions.
+The following Ansible role and collection dependencies must be installed to the Ansible instance within the control node's virtual environment. See 'Installing Ansible Dependencies' for instructions.
 
 | Dependency                | Type       | Source | Version      |
 | ------------------------- | ---------- | ------ | ------------ |
@@ -62,8 +62,8 @@ From the project root directory AND with the aforementioned control node's virtu
 
 ## SSH Private/Public Keys (Control and Remote Node):
 Ansible communicates with remote nodes to perform automation tasks using SSH. To allow Ansible to establish SSH connections between your control and remote nodes, set up an SSH trust relationship between them using the following steps:
-1. Create a key pair on admin machine.
-2. Transfer public key to server machine's authorized_keys file of X user.
+1. Create a key pair on the control node.
+2. Transfer public key to remote node's authorized_keys file of X user.
 
 To not reinvent the wheel, I'll link a well-made tutorial article on the topic published by Digital Ocean: [How To Set Up SSH Keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2)
 
@@ -103,8 +103,8 @@ To avoid data loss of these files that aren't Git tracked, make sure to backup t
 Below are some, but not all, possible future improvements to be developed for the project.
 - [ ] Research more about certbot (letsencrypt) so that I can properly manage letsencrypt accounts and credentials.
 - [ ] Test certbot's renew cert functionality (both running manually and via the configured cron job)
-- [ ] Add functionality to create new 'service account user'. Then, configure and deploy server with new service account (instead of current method of performing all functions using standard user account).
-- [ ] improve nginx configurations to align with security best practices (security headers, server side configs, etc.)
+- [ ] Add functionality to create a new 'service account user'. Then, configure and deploy a remote node with the new service account (instead of current method of performing all functions using standard user account).
+- [ ] improve nginx configurations to align with security best practices (security headers, server-side configs, etc.)
 - [ ] improve file system security by implementing least privilege on server-related files/dirs.
 - [ ] complete the modularization of the 'app name' so that others can substitute 'zaphod' for 'foo'.
 - [ ] Learn about and integrate Ansible's cloud provider modules to build out automation capabilities such as managing cloud platform resources (VMs, VPCs, etc.).
