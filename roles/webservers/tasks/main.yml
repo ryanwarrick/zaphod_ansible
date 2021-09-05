@@ -15,6 +15,11 @@
   become: yes
   import_tasks: nginx_config.yml
 
+- name: configure openssl
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  import_tasks: openssl_config.yml
+
 - name: install zaphod
   remote_user: "{{ ansible_user }}"
   become: yes
