@@ -10,4 +10,4 @@
     dest: /etc/ssl/openssl.cnf
   notify:
     - restart nginx
-    - retart gunicorn
+    - restart gunicorn
