@@ -16,6 +16,10 @@ host_vars/*
 !host_vars/host1.yml
 !host_vars/host2.yml
 
-# Ignore instance-specific items (config & content) in webserves/files dir.
-roles/webservers/files/config.py
-roles/webservers/files/content
+# Ignore instance files (config & content) in webserves/files dir (but preserve examples)
+!roles/webservers/files
+roles/webservers/files/*
+!roles/webservers/files/host1/*
+
+# Ignore local scratch .yml files
+scratch.yml
