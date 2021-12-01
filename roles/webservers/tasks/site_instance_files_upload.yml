@@ -3,14 +3,13 @@
 
 - name: Upload site instance-specific files to server
   copy:
-    src: "{{ item }}"
-    dest: "/home/{{ ansible_user }}/zaphod/venv/var/zaphod-instance/{{ item }}"
+    src: "{{ website_files_directory_name }}/"
+    dest: "/home/{{ zaphod_user }}/zaphod/venv/var/zaphod-instance/"
     mode: "770"
-    owner: "{{ ansible_user }}"
+    owner: "{{ zaphod_user }}"
     group: "{{ nginx_user }}"
-  loop:
-    - "content/"
-    - "config.py"
   notify:
     - restart gunicorn
     - restart nginx
+    - chown venv to zaphod_user
+    - chmod zaphod_user's home directory

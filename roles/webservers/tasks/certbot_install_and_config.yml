@@ -20,7 +20,7 @@
   import_role:
     name: geerlingguy.certbot
   vars:
-    certbot_admin_email: "{{ certbot_admin_email }}"
+    certbot_admin_email: "{{ certbot_admin_account_email }}"
     certbot_create_if_missing: true
     certbot_certs:
       - domains:
@@ -29,6 +29,6 @@
       - nginx
     certbot_install_method: package
     certbot_auto_renew: true
-    certbot_auto_renew_user: "{{ ansible_user }}"
-    certbot_auto_renew_minute: "20"
+    certbot_auto_renew_user: "{{ zaphod_user }}"
     certbot_auto_renew_hour: "5"
+    certbot_auto_renew_minute: "20"

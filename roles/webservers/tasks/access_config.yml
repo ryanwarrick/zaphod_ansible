@@ -1,0 +1,7 @@
+---
+
+- name: configure ufw - granular rules (HTTP/HTTPS)
+  user:
+    name: "{{ ansible_user }}"
+    groups: "{{ zaphod_user }}, {{ nginx_user }}"
+    append: yes

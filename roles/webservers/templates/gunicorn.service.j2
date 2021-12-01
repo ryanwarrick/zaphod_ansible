@@ -3,11 +3,11 @@ Description=Gunicorn instance to serve {{ app_name }}
 After=network.target
 
 [Service]
-User={{ ansible_user }}
+User={{ zaphod_user }}
 Group= {{ nginx_user }}
-WorkingDirectory=/home/{{ ansible_user }}/{{ app_name }}
-Environment="PATH=/home/{{ ansible_user }}/{{ app_name }}/venv/bin"
-ExecStart=/home/{{ ansible_user }}/{{ app_name }}/venv/bin/gunicorn --access-logfile access.log --error-logfile error.log --workers 1 --bind unix:/var/run/{{ app_name }}/{{ app_name }}.sock -m 007 {{ app_name }}:create_app()
+WorkingDirectory=/home/{{ zaphod_user }}/{{ app_name }}
+Environment="PATH=/home/{{ zaphod_user }}/{{ app_name }}/venv/bin"
+ExecStart=/home/{{ zaphod_user }}/{{ app_name }}/venv/bin/gunicorn --access-logfile access.log --error-logfile error.log --workers 1 --bind unix:/var/run/{{ app_name }}/{{ app_name }}.sock -m 007 {{ app_name }}:create_app()
 
 [Install]
 WantedBy=multi-user.target

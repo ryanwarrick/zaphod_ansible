@@ -1,12 +1,26 @@
-ansible_host: host2.localnet.com
+ansible_host: host2.localnet.com # The name/IP of the host to connect to
 
-ansible_user: user1
-nginx_user: www-data
+website_files_directory_name: host2 # Dir name in roles/webservers/files/ holding website's files (suggestion: set to domain name w/o TLD)
 
-production_deployment: true
+ansible_user: user1 # Username used when connecting to the host
+zaphod_user: zaphod # Username to create, install, and run Zaphod under
+nginx_user: www-data # Username of auto-created nginx user (can change per distro)
 
-server_ip: 192.0.2.2
-domain_name: example.com
-domain_name_with_www: www.example.com
+production_deployment: true # True: Enables and configures TLS on nginx site. False: No TLS enabled, HTTP only, for testing.
 
-ansible_python_interpreter: /usr/bin/python3
+# Nginx Server Config
+server_ip: 192.0.2.2 # IP (not hostname). Likely to be equal to ansible_host value.
+domain_name: example.com # Domain name of website
+domain_name_with_www: www.example.com # Domain name (for 'www' redirect)
+
+ansible_python_interpreter: /usr/bin/python3 # The target host python path
+
+certbot_admin_account_email: example@example.com # Email for authentication to certbot
+
+# For installing a custom fork of 'Zaphod' project
+# Regarding the three variables below:
+# - If any 'null': zaphod_ansible installs the standard 'zaphod' repo.
+# - If all set to 'non-null': zaphod_ansible clones custom repo, builds wheel from source, & installs package
+github_username: username
+github_project_name: project_name
+github_personal_access_token: personal_access_token

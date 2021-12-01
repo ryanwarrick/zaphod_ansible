@@ -11,7 +11,7 @@
 - name: create directory for temporary socket file
   file:
     path: /var/run/zaphod
-    owner: "{{ ansible_user }}"
+    owner: "{{ zaphod_user }}"
     group: "{{ nginx_user }}"
     mode: "770"
     state: directory

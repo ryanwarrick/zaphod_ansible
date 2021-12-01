@@ -3,10 +3,10 @@
 
 - name: create zaphod dir if it doesn't exist
   ansible.builtin.file:
-    path: "/home/{{ ansible_user }}/zaphod"
+    path: "/home/{{ zaphod_user }}/zaphod"
     state: directory
     mode: "770"
-    owner: "{{ ansible_user }}"
+    owner: "{{ zaphod_user }}"
     group: "{{ nginx_user }}"
 
 - name: ensure pip is installed
@@ -24,24 +24,63 @@
 
 - name: Purge existing venv, if exists
   file:
-    path: "/home/{{ ansible_user }}/zaphod/venv"
+    path: "/home/{{ zaphod_user }}/zaphod/venv"
     state: absent
 
+# Determine next tasks to exec: Default vs Custom 'zaphod' repo install tasks
+- name: Evaluate host_vars to determine what 'zaphod' repo to install
+  set_fact:
+      zaphod_repo_source: "custom"
+  when:
+    - github_username != None
+    - github_project_name != None
+    - github_personal_access_token != None
+
+- name: Evaluate host_vars to determine what 'zaphod' repo to install (continued)
+  set_fact:
+      zaphod_repo_source: "default"
+  when: zaphod_repo_source is undefined
+
+
+# Default Zaphod Install (from standard 'zaphod' repo)
 - name: install Zaphod from source (via GitHub)
   pip:
     name: git+https://github.com/ryanwarrick/zaphod.git
     state: forcereinstall
-    virtualenv: "/home/{{ ansible_user }}/zaphod/venv"
+    virtualenv: "/home/{{ zaphod_user }}/zaphod/venv"
     virtualenv_command: /usr/local/bin/virtualenv
+  # become_user: "{{ zaphod_user }}"
+  when: zaphod_repo_source == "default"
+  notify:
+    - chown venv to zaphod_user
+    - chmod zaphod_user's home directory
 
-- name: chown venv to ansible_user
-  file:
-    path: "/home/{{ ansible_user }}/zaphod/venv"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    recurse: yes
+# Custom Zaphod Install (from forked custom 'zaphod' repo)
+- name: Clone alternative zaphod repo
+  git:
+    repo: https://{{ github_personal_access_token }}@github.com/{{ github_username }}/{{ github_project_name }}.git
+    dest: /home/{{ zaphod_user }}/zaphod/custom_repo_source_clone
+    force: yes
+  when: zaphod_repo_source == "custom"
 
-- name: chmod user1 home directory
-  file:
-    path: "/home/{{ ansible_user }}"
-    mode: "770"
+# Custom Zaphod Install (from forked custom 'zaphod' repo)
+- name: Build package wheel from local source
+  command:
+    cmd: python3 setup.py bdist_wheel
+    chdir: /home/{{ zaphod_user }}/zaphod/custom_repo_source_clone
+  when: zaphod_repo_source == "custom"
+
+# Custom Zaphod Install (from forked custom 'zaphod' repo)
+- name: Install alternative zaphod repo
+  pip:
+    name: zaphod
+    state: forcereinstall
+    extra_args: "zaphod --find-links=file:///home/{{ zaphod_user }}/zaphod/custom_repo_source_clone/dist"
+    virtualenv: "/home/{{ zaphod_user }}/zaphod/venv"
+    virtualenv_command: /usr/local/bin/virtualenv
+    # virtualenv_command: /home/{{ zaphod_user }}/.local/bin/virtualenv # The above path didn't work for awhile. Retaining line until I can confirm above line is stable.
+  # become_user: "{{ zaphod_user }}"
+  when: zaphod_repo_source == "custom"
+  notify:
+    - chown venv to zaphod_user
+    - chmod zaphod_user's home directory

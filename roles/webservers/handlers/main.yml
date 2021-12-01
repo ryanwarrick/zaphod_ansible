@@ -20,3 +20,20 @@
   service:
     name: nginx
     state: restarted
+
+- name: chown venv to zaphod_user
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  file:
+    path: "/home/{{ zaphod_user }}/zaphod/venv"
+    owner: "{{ zaphod_user }}"
+    group: "{{ nginx_user }}"
+    recurse: yes
+
+- name: chmod zaphod_user's home directory
+  remote_user: "{{ ansible_user }}"
+  become: yes
+  file:
+    path: "/home/{{ zaphod_user }}"
+    mode: "770"
+    recurse: yes

@@ -1,0 +1,6 @@
+---
+# This playbook contains plays related to the creation of a zaphod-specific user account for all "webserver" nodes
+
+- name: "Create zaphod-specific user account"
+  user:
+    name: "zaphod"

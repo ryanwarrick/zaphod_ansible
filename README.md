@@ -104,9 +104,7 @@ To avoid data loss of these files that aren't Git tracked, make sure to backup t
 Below are some, but not all, possible future improvements to be developed for the project.
 - [ ] Research more about certbot (letsencrypt) so that I can properly manage letsencrypt accounts and credentials.
 - [ ] Test certbot's renew cert functionality (both running manually and via the configured cron job)
-- [ ] Add functionality to create a new 'service account user'. Then, configure and deploy a remote node with the new service account (instead of current method of performing all functions using standard user account).
-- [ ] improve nginx configurations to align with security best practices (security headers, server-side configs, etc.)
-- [ ] improve file system security by implementing least privilege on server-related files/dirs.
-- [ ] complete the modularization of the 'app name' so that others can substitute 'zaphod' for 'foo'.
+- [ ] Improve nginx configurations to align with security best practices (security headers, server-side configs, etc.)
+- [ ] Improve file system security by implementing least privilege on server-related files/dirs.
 - [ ] Learn about and integrate Ansible's cloud provider modules to build out automation capabilities such as managing cloud platform resources (VMs, VPCs, etc.).
-- [ ] increase testing & improve support across various distros
+- [ ] Increase testing & improve support across various distros
